@@ -5,14 +5,18 @@
 package edu.berkeley.confspell;
 
 import java.io.*;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+
 import edu.berkeley.confspell.SpellcheckConf.Slurper;
+import edu.berkeley.confspell.OptionSet;
 
 /**
  * Reads a Java Properties file into an OptionSet
  */
 class PSlurper implements Slurper {
-	public void slurp(File f, OptionSet res) throws IOException {
+	public OptionSet slurp(List<File> files, Map<String, String> configKeyVal) throws IOException {
+		/*
 		Properties p = new Properties();
 		FileInputStream fis = new FileInputStream(f);
 		p.load(fis);
@@ -27,6 +31,12 @@ class PSlurper implements Slurper {
 			res.checkForSubst(v);
 		}
 		// "PROP-" +
+		*/
+
+		if (false) {
+			throw new IOException();
+		}
+		return new OptionSet();
 	}
 
 }

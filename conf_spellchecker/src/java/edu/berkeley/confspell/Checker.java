@@ -79,6 +79,7 @@ public class Checker {
 	 */
 	static Res OK = new Res("OK");
 	// static Res NoTypeKnown = new Res("No type known for");
+
 	/**
 	 * Return result for an option of a type for which no checker exists
 	 */
