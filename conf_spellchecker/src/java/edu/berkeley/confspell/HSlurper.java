@@ -5,10 +5,11 @@
 package edu.berkeley.confspell;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.List;
 
-import org.apache.hadoop.conf.*;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 
 import edu.berkeley.confspell.SpellcheckConf.Slurper;
@@ -21,35 +22,31 @@ import edu.berkeley.confspell.OptionSet;
  */
 public class HSlurper implements Slurper {
 
-	// stolen from hadoop source
+	public void slurp(OptionSet optionSet, List<File> files, Map<String, String> configKeyVal) throws IOException {
+		Configuration hadoopConf = new Configuration(false);
 
-	public OptionSet slurp(List<File> files, Map<String, String> configKeyVal) {
-	  /*
-		Configuration c = new Configuration(false);
-		c.addResource(new Path(f.getAbsolutePath())); // to search filesystem, not
-																									// classpath
-		c.reloadConfiguration();
-		fromHConf(res, c);
-	  */
-		return new OptionSet();
+		// Read config from all the files.
+		for (File file : files) {
+			if (!file.exists()) {
+				throw new IOException("Config file not found at " + file.getAbsolutePath());
+			}
+			hadoopConf.addResource(new Path(file.getAbsolutePath()));
+		}
+
+		// Set config from the key/value pairs.
+		for (Map.Entry<String, String> entry : configKeyVal.entrySet()) {
+			hadoopConf.set(entry.getKey(), entry.getValue());
+		}
+
+		fromHConf(optionSet, hadoopConf);
 	}
 
-	public static void fromHConf(OptionSet res, Configuration c) {
+	private void fromHConf(OptionSet res, Configuration c) {
 		for (Map.Entry<String, String> e : c) {
-
-			String rawV = e.getValue();
+			String rawV = c.getRaw(e.getKey());
 			String cookedV = c.get(e.getKey());
-
-			res.put(e.getKey(), cookedV); // to force substitution
-
+			res.put(e.getKey(), cookedV); // To force substitution.
 			res.checkForSubst(rawV);
 		}
 	}
-
-	public static OptionSet fromHConf(Configuration c) {
-		OptionSet res = new OptionSet();
-		fromHConf(res, c);
-		return res;
-	}
-
 }

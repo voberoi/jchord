@@ -107,27 +107,6 @@ public class OptionSet { // extends TreeMap<String,String>
 		return conf.containsKey(s);
 	}
 
-	/**
-	 * Construct an OptionSet from a given properties file.
-	 */
-	public static OptionSet fromPropsFile(String propsfilename)
-			throws java.io.IOException {
-		return fromPropsFile(new File(propsfilename));
-	}
-
-	/**
-	 * Construct an OptionSet from a given properties file.
-	 */
-	public static OptionSet fromPropsFile(File propsfilename)
-			throws java.io.IOException {
-
-		OptionSet result = new OptionSet();
-		result.enableSubstitution();
-		PSlurper ps = new PSlurper();
-		ps.slurp(propsfilename, result);
-		return result;
-	}
-
 	private void enableSubstitution() {
 		substitute = true;
 	}
@@ -144,5 +123,4 @@ public class OptionSet { // extends TreeMap<String,String>
 	public int size() {
 		return conf.size();
 	}
-
 }

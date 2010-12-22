@@ -34,14 +34,16 @@ public class SpellcheckConf {
 	 * from files and explicitly defined configuration.
 	 * 
 	 */
-	interface Slurper {
+	public interface Slurper {
 		/**
-		 * Reads files and any given config key/value pairs, returns an OptionSet
-		 * with fully resolved/masked configuration. Configuration defined in
-		 * files later in the list take precedent defined in files earlier in the
-		 * list. Explicitly-defined configuration in configKeyVal takes the highest
-         * precedence.
+		 * Reads files and any given config key/value pairs, and sticks them in
+		 * the given OptionSet with fully resolved/masked configuration.
+		 * Configuration defined in files later in the list take precedent
+		 * over configuration defined in files earlier in the list. Explicitly
+		 * defined configuration in configKeyVal takes the highest precedence.
 		 * 
+		 * @param optionSet
+		 *          the OptionSet object to populate
 		 * @param files
 		 *          any files to be read
 		 * @param configKeyVal
@@ -49,7 +51,7 @@ public class SpellcheckConf {
 		 * @throws IOException
 		 * @return an OptionSet with fully resolved configuration
 		 */
-		OptionSet slurp(List<File> files, Map<String, String> configKeyVal) throws IOException;
+		void slurp(OptionSet optionSet, List<File> files, Map<String, String> configKeyVal) throws IOException;
 	}
 
 	private static void helpAndExit(int status, String msg) {
@@ -143,7 +145,7 @@ public class SpellcheckConf {
 	private static OptDictionary readConfDict(String confDictPath) {
 		File confDict = new File(confDictPath);
 		if (!confDict.exists()) {
-			helpAndExit(1, "Config dict not found at " + confDictPath);
+			helpAndExit(1, "Config dict not found at " + confDict.getAbsolutePath());
 		}
 
 		OptDictionary dictionary = new OptDictionary();
@@ -191,9 +193,9 @@ public class SpellcheckConf {
 			slurper = new PSlurper();
 		}
 
-		OptionSet clientConf = null;
+		OptionSet clientConf = new OptionSet();
 		try {
-			clientConf = slurper.slurp(files, configKeyVal);
+			slurper.slurp(clientConf, files, configKeyVal);
 		} catch (IOException e) {
 			System.err.println("Error while reading configuration.");
 			e.printStackTrace();

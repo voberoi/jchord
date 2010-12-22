@@ -15,7 +15,7 @@ import edu.berkeley.confspell.OptionSet;
  * Reads a Java Properties file into an OptionSet
  */
 class PSlurper implements Slurper {
-	public OptionSet slurp(List<File> files, Map<String, String> configKeyVal) throws IOException {
+	public void slurp(OptionSet optionSet, List<File> files, Map<String, String> configKeyVal) throws IOException {
 		/*
 		Properties p = new Properties();
 		FileInputStream fis = new FileInputStream(f);
@@ -32,11 +32,6 @@ class PSlurper implements Slurper {
 		}
 		// "PROP-" +
 		*/
-
-		if (false) {
-			throw new IOException();
-		}
-		return new OptionSet();
 	}
 
 }
