@@ -12,11 +12,15 @@ import edu.berkeley.confspell.SpellcheckConf.Slurper;
 import edu.berkeley.confspell.OptionSet;
 
 /**
- * Reads a Java Properties file into an OptionSet
+ * Reads a Java Properties file into an OptionSet.
+ * 
+ * NOTE: doesn't support masking configuration from multiple files and
+ * key/value pairs. Only supports reading the first file from the file list.
  */
 class PSlurper implements Slurper {
 	public void slurp(OptionSet optionSet, List<File> files, Map<String, String> configKeyVal) throws IOException {
-		/*
+		File f = files.get(0);
+
 		Properties p = new Properties();
 		FileInputStream fis = new FileInputStream(f);
 		p.load(fis);
@@ -27,11 +31,10 @@ class PSlurper implements Slurper {
 			// no need to remove comments, Java does it for us.
 			// if(v.contains("#"))
 			// v = v.substring(0, v.indexOf("#"))
-			res.put(e.getKey().toString(), v);
-			res.checkForSubst(v);
+			optionSet.put(e.getKey().toString(), v);
+			optionSet.checkForSubst(v);
 		}
 		// "PROP-" +
-		*/
 	}
 
 }
